@@ -17,6 +17,7 @@ const Data = () => {
       data = conversation;
       break;
   }
+  console.log(conversation);
   return (
     <div className=" overflow-scroll  ">
       <div className="text-primary text-lg mx-4 mt-4">

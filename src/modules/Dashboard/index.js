@@ -89,7 +89,7 @@ const Dashboard = () => {
         <Data />
       </div>
       {/* Message /conversation box */}
-      <div className="w-[68%] h-screen bg-secondary flex flex-col items-center ">
+      <div className="w-[68%] h-screen bg-gary flex flex-col items-center ">
         {/* receiver info box */}
         {message?.receiver?.name && (
           <div className="w-[75%] bg-secondary h-[80px] mt-4 rounded-full flex items-center px-14">
