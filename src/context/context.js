@@ -3,8 +3,9 @@ import reducer from "../reducer/Appreducer";
 import { io } from "socket.io-client";
 
 const myContest = createContext();
-const SocketAPI = "http://localhost:8080";
-const API = "http://localhost:8000/api/";
+// const SocketAPI = "http://localhost:8080";
+const SocketAPI = "http://localhost:8000/";
+const API = "http://localhost:8000/";
 
 const initialState = {
   isLoading: false,
@@ -43,7 +44,7 @@ const AppProvider = ({ children }) => {
   // fetching convesations
   const fetchConversation = async (user) => {
     try {
-      const res = await fetch(`${API}conversation/${user._id}`, {
+      const res = await fetch(`${API}api/conversation/${user._id}`, {
         method: "Get",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +59,7 @@ const AppProvider = ({ children }) => {
   //   Fetching Users
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`${API}users`, {
+      const res = await fetch(`${API}api/users`, {
         method: "Get",
         headers: {
           "Content-Type": "application/json",
@@ -74,7 +75,7 @@ const AppProvider = ({ children }) => {
   const fetchMessages = async (conversationId, user) => {
     try {
       const res = await fetch(
-        `${API}message/${conversationId}?senderId=${state.userDetail._id}&&receiverId=${user.userId} `,
+        `${API}api/message/${conversationId}?senderId=${state.userDetail._id}&&receiverId=${user.userId} `,
         {
           method: "Get",
           headers: {
@@ -106,7 +107,7 @@ const AppProvider = ({ children }) => {
       receiverId: userId,
     });
     //const res= await fetch("http://localhost:8000/api/message", {
-    await fetch(`${API}message`, {
+    await fetch(`${API}api/message`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
