@@ -3,10 +3,9 @@ import reducer from "../reducer/Appreducer";
 import { io } from "socket.io-client";
 
 const myContest = createContext();
-// const SocketAPI = "http://localhost:8080";
-// const API = "http://localhost:8000/";
-const SocketAPI = "https://chat-app-end.vercel.app/";
-const API = "https://chat-app-end.vercel.app/";
+const API = "http://localhost:8000/";
+const SocketAPI = "http://localhost:8000/";
+// const API = "https://chat-app-end.vercel.app/";
 
 const initialState = {
   isLoading: false,
@@ -18,9 +17,6 @@ const initialState = {
   users: [],
   socket: null,
   navbar: "chats",
-  //   onlineUsers: [],
-  //   typing: false,
-  //   typingUser: "",
 };
 
 const AppProvider = ({ children }) => {
@@ -122,6 +118,7 @@ const AppProvider = ({ children }) => {
     });
     dispatch({ type: "SET_MESSAGE_INPUT", payload: "" });
   };
+  // set SocketMessage
   const setSocketMessage = (data) => {
     dispatch({ type: "SET_SOCKET_MESSAGE", payload: data });
   };
@@ -135,11 +132,11 @@ const AppProvider = ({ children }) => {
   //   for socket connection
   useEffect(() => {
     const { socket, userDetail } = state;
-    // socket?.emit("addUser", userDetail?._id);
-    // socket?.on("getUsers", (Users) => console.log("activeUsers=>", Users));
-    // socket?.on("getMessage", (data) => {
-    //   setSocketMessage(data);
-    // });
+    socket?.emit("addUser", userDetail?._id);
+    socket?.on("getUsers", (Users) => console.log("activeUsers=>", Users));
+    socket?.on("getMessage", (data) => {
+      setSocketMessage(data);
+    });
   }, [state.socket]);
   return (
     <myContest.Provider
