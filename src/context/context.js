@@ -3,9 +3,10 @@ import reducer from "../reducer/Appreducer";
 import { io } from "socket.io-client";
 
 const myContest = createContext();
-const API = "http://localhost:8000/";
-const SocketAPI = "http://localhost:8000/";
-// const API = "https://chat-app-end.vercel.app/";
+// const API = "http://localhost:8000/";
+// const SocketAPI = "http://localhost:8000/";
+const API = "https://chat-app-backend-orcin.vercel.app/";
+const SocketAPI = "https://chat-app-backend-orcin.vercel.app/";
 
 const initialState = {
   isLoading: false,
