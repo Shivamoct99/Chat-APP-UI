@@ -14,7 +14,7 @@ const Form = ({ isSignIn = false }) => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(`${API}/api/${isSignIn ? "login" : "register"}`, {
+    const res = await fetch(`${API}api/${isSignIn ? "login" : "register"}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
