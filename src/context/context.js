@@ -27,8 +27,7 @@ const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   //   set Socket Api
   const setSocket = (Api) => {
-    console.log(Api);
-    // dispatch({ type: "SET_SOCKET", payload: io(Api) });
+    dispatch({ type: "SET_SOCKET", payload: io(Api) });
   };
   //   set LoginUserDetail
   const setUserDetail = (user) => {
@@ -102,12 +101,12 @@ const AppProvider = ({ children }) => {
       receiver: { userId },
     } = message;
     const { _id } = userDetail;
-    // socket?.emit("sendMessage", {
-    //   conversationId: conversationId,
-    //   senderId: _id,
-    //   message: messageInput,
-    //   receiverId: userId,
-    // });
+    socket?.emit("sendMessage", {
+      conversationId: conversationId,
+      senderId: _id,
+      message: messageInput,
+      receiverId: userId,
+    });
     //const res= await fetch("http://localhost:8000/api/message", {
     await fetch(`${API}api/message`, {
       method: "POST",
@@ -123,9 +122,9 @@ const AppProvider = ({ children }) => {
     });
     dispatch({ type: "SET_MESSAGE_INPUT", payload: "" });
   };
-  // const setSocketMessage = (data) => {
-  //   dispatch({ type: "SET_SOCKET_MESSAGE", payload: data });
-  // };
+  const setSocketMessage = (data) => {
+    dispatch({ type: "SET_SOCKET_MESSAGE", payload: data });
+  };
 
   useEffect(() => {
     const user = state.userDetail;
@@ -134,18 +133,19 @@ const AppProvider = ({ children }) => {
     fetchUsers();
   }, []);
   //   for socket connection
-  // useEffect(() => {
-  //   const { socket, userDetail } = state;
-  //   // socket?.emit("addUser", userDetail?._id);
-  //   // socket?.on("getUsers", (Users) => console.log("activeUsers=>", Users));
-  //   // socket?.on("getMessage", (data) => {
-  //   //   setSocketMessage(data);
-  //   // });
-  // }, [state.socket]);
+  useEffect(() => {
+    const { socket, userDetail } = state;
+    // socket?.emit("addUser", userDetail?._id);
+    // socket?.on("getUsers", (Users) => console.log("activeUsers=>", Users));
+    // socket?.on("getMessage", (data) => {
+    //   setSocketMessage(data);
+    // });
+  }, [state.socket]);
   return (
     <myContest.Provider
       value={{
         ...state,
+        API,
         setUserDetail,
         fetchMessages,
         setMessageInput,

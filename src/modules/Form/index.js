@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/context";
 
 const Form = ({ isSignIn = false }) => {
-  let { setUserDetail } = useAppContext();
+  let { setUserDetail, API } = useAppContext();
   const [data, setData] = useState({
     ...(!isSignIn && { name: "" }),
     email: "",
@@ -14,16 +14,13 @@ const Form = ({ isSignIn = false }) => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(
-      `http://localhost:8000/api/${isSignIn ? "login" : "register"}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      }
-    );
+    const res = await fetch(`${API}/api/${isSignIn ? "login" : "register"}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
     if (res.status === 400) {
       alert("User email or password is incorrect");
     } else {
