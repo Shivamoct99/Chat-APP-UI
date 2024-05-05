@@ -5,8 +5,8 @@ import { io } from "socket.io-client";
 const myContest = createContext();
 // const API = "http://localhost:8000/";
 // const SocketAPI = "http://localhost:8000/";
-const API = "https://chat-app-backend-orcin.vercel.app/";
-const SocketAPI = "https://chat-app-backend-orcin.vercel.app/";
+const API = "https://chat-app-backend-b98d.onrender.com/";
+const SocketAPI = "https://chat-app-backend-b98d.onrender.com/";
 
 const initialState = {
   isLoading: false,
