@@ -23,6 +23,8 @@ const Form = ({ isSignIn = false }) => {
     });
     if (res.status === 400) {
       alert("User email or password is incorrect");
+    } else if (res.status === 201) {
+      navigate("/user/Sign-in");
     } else {
       const resData = await res.json();
       if (resData.token) {
