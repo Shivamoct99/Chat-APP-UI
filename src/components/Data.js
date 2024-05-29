@@ -17,13 +17,12 @@ const Data = () => {
       data = conversation;
       break;
   }
-  // console.log(conversation);
   return (
-    <div className=" overflow-scroll  ">
-      <div className="text-primary text-lg mx-4 mt-4">
+    <div className="h-[80%]  ">
+      <div className=" text-primary text-lg mx-4 mt-4">
         {navbar === "chats" ? "Messages" : "Peoples"}
       </div>
-      <div className="mx-6  ">
+      <div className="h-[90%] mx-6 overflow-y-scroll  ">
         {data.length > 0 ? (
           data.map(({ user, conversationId }) => {
             const { name, email, userId } = user;
