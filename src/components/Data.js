@@ -1,10 +1,12 @@
 import React from "react";
 import logo from "../assets/logo.jpeg";
 import { useAppContext } from "../context/context";
+import { useNavigate } from "react-router-dom";
 
 const Data = () => {
   const { fetchMessages, userDetail, navbar, conversation, users } =
     useAppContext();
+  const navigate = useNavigate();
   let data;
   switch (navbar) {
     case "chats":
@@ -36,6 +38,9 @@ const Data = () => {
                     conversationId
                       ? fetchMessages(conversationId, user)
                       : fetchMessages("new", user);
+                    if (window.innerWidth <= "767") {
+                      navigate(`/conversation`);
+                    }
                   }}
                 >
                   <div>

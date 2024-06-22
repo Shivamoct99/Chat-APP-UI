@@ -6,10 +6,10 @@ const Navbar = () => {
   const [nav, setNav] = useState("");
   const { setNavbar } = useAppContext();
   return (
-    <div className="Navbar w-[100%] h-[100%] bg-slate-300 py-6 flex  items-center justify-between flex-col ">
-      <div className="w-[100%] flex items-center flex-col gap-5 ">
+    <div className="Navbar w-[20%] h-[100%] bg-slate-300 py-6 flex  items-center justify-between flex-col sm:flex-row sm:px-6 sm:w-full sm:h-[10%] ">
+      <div className="w-[100%] flex items-center gap-5 flex-col sm:flex-row  ">
         {/* whats app logo */}
-        <div className="w-[100%] flex items-center  flex-col pb-6 border-slate-400 border-b-2">
+        <div className="flex items-center flex-col pb-5 border-slate-400 border-b-2 sm:hidden">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="44"
@@ -156,7 +156,7 @@ const Navbar = () => {
           <span></span>
         </div>
       </div>
-      <div className="flex items-center flex-col gap-1">
+      <div className="flex items-center gap-1 flex-col sm:flex-row ">
         {/* setting icon */}
         <div className="flex items-center flex-col cursor-pointer ">
           <svg
