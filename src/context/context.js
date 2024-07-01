@@ -11,7 +11,8 @@ const SocketAPI = "https://chat-app-backend-b98d.onrender.com/";
 const initialState = {
   isLoading: false,
   isError: false,
-  userDetail: JSON.parse(localStorage.getItem("userDetail:detail")),
+  userDetail: JSON.parse(localStorage.getItem("userDetail:")),
+  // token: localStorage.getItem("userToken:"),
   conversation: [],
   message: {},
   messageInput: "",

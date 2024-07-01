@@ -28,9 +28,9 @@ const Form = ({ isSignIn = false }) => {
     } else {
       const resData = await res.json();
       if (resData.token) {
-        localStorage.setItem("user:token", resData.token);
-        localStorage.setItem("userDetail:detail", JSON.stringify(resData.user));
-        setUserDetail(JSON.parse(localStorage.getItem("userDetail:detail")));
+        localStorage.setItem("userToken:", resData.token);
+        localStorage.setItem("userDetail:", JSON.stringify(resData.user));
+        setUserDetail(JSON.parse(localStorage.getItem("userDetail:")));
         navigate("/");
       }
     }

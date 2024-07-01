@@ -4,7 +4,7 @@ import Form from "./modules/Form";
 import ConvesationBox from "./components/ConvesationBox";
 
 const ProtectedRoutes = ({ children, auth = false }) => {
-  const isLoggedIn = localStorage.getItem("user:token") !== null || false;
+  const isLoggedIn = localStorage.getItem("userToken:") !== null || false;
 
   if (!isLoggedIn && auth) {
     return <Navigate to={"/user/sign-in"} />;
