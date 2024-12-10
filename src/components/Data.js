@@ -1,12 +1,19 @@
 import React from "react";
 import logo from "../assets/logo.jpeg";
 import { useAppContext } from "../context/context";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const Data = () => {
-  const { fetchMessages, userDetail, navbar, conversation, users } =
-    useAppContext();
-  const navigate = useNavigate();
+  const {
+    isLoading,
+    fetchMessages,
+    userDetail,
+    navbar,
+    conversation,
+    users,
+    setconversations,
+  } = useAppContext();
+  // const navigate = useNavigate();
   let data;
   switch (navbar) {
     case "chats":
@@ -19,15 +26,18 @@ const Data = () => {
       data = conversation;
       break;
   }
+  if (isLoading) {
+    return <div> ......Loading </div>;
+  }
   return (
     <div className="h-[80%]  ">
-      <div className=" text-primary text-lg mx-4 mt-4">
+      <div className=" h-[5%] text-primary text-lg mx-4 mt-4">
         {navbar === "chats" ? "Messages" : "Peoples"}
       </div>
-      <div className="h-[90%] mx-6 overflow-y-scroll  ">
+      <div className="h-[95%] mx-6 overflow-y-scroll  ">
         {data.length > 0 ? (
           data.map(({ user, conversationId }) => {
-            const { name, email, userId } = user;
+            const { name, email, userId, profile_pic } = user;
             return (
               <div className=" flex  items-center py-4 border-b border-b-gray-300">
                 <div
@@ -39,17 +49,16 @@ const Data = () => {
                       ? fetchMessages(conversationId, user)
                       : fetchMessages("new", user);
                     if (window.innerWidth <= "767") {
-                      navigate(`/conversation`);
+                      // navigate(`/conversation`);
+                      setconversations();
                     }
                   }}
                 >
                   <div>
                     <img
-                      src={logo}
+                      src={profile_pic || logo}
                       alt={"name"}
-                      width={40}
-                      height={40}
-                      className="rounded-full"
+                      className="w-14 h-14 rounded-full"
                     />
                   </div>
                   <div className="ml-6">

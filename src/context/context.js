@@ -19,6 +19,7 @@ const initialState = {
   users: [],
   socket: null,
   navbar: "chats",
+  conversations: false,
 };
 
 const AppProvider = ({ children }) => {
@@ -36,12 +37,18 @@ const AppProvider = ({ children }) => {
     let message = e.target.value;
     dispatch({ type: "SET_MESSAGE_INPUT", payload: message });
   };
+  //   set MessageImageInput
+  const setMessageImageInput = (value) => {
+    let message = value;
+    dispatch({ type: "SET_MESSAGE_INPUT", payload: message });
+  };
   //   set navbar
   const setNavbar = (value) => {
     dispatch({ type: "SET_NAVBAR", payload: value });
   };
   // fetching convesations
   const fetchConversation = async (user) => {
+    dispatch({ type: "SET_LOADING" });
     try {
       const res = await fetch(`${API}api/conversation/${user._id}`, {
         method: "Get",
@@ -124,13 +131,23 @@ const AppProvider = ({ children }) => {
   const setSocketMessage = (data) => {
     dispatch({ type: "SET_SOCKET_MESSAGE", payload: data });
   };
+  // set conversations
+  const setconversations = () => {
+    dispatch({ type: "SET_Conaversations", payload: state.conversations });
+  };
+  const setMessage = () => {
+    dispatch({ type: "SET_Message", payload: {} });
+  };
 
   useEffect(() => {
-    const user = state.userDetail;
     setSocket(SocketAPI);
+  }, []);
+  useEffect(() => {
+    const user = state.userDetail;
+    setMessage();
     fetchConversation(user);
     fetchUsers();
-  }, []);
+  }, [state.userDetail]);
   //   for socket connection
   useEffect(() => {
     const { socket, userDetail } = state;
@@ -148,8 +165,10 @@ const AppProvider = ({ children }) => {
         setUserDetail,
         fetchMessages,
         setMessageInput,
+        setMessageImageInput,
         setNavbar,
         sendMessage,
+        setconversations,
       }}
     >
       {children}

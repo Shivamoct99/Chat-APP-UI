@@ -1,5 +1,10 @@
 const Appreducer = (state, action) => {
   switch (action.type) {
+    case "SET_LOADING":
+      return {
+        ...state,
+        isLoading: true,
+      };
     case "SET_USER_DETAIL":
       return {
         ...state,
@@ -23,6 +28,7 @@ const Appreducer = (state, action) => {
     case "SET_CONVERSATION_DATA":
       return {
         ...state,
+        isLoading: false,
         conversation: action.payload,
       };
     case "SET_USERS_DATA":
@@ -46,6 +52,16 @@ const Appreducer = (state, action) => {
           ...message,
           messages: [...messages, { user: data.user, message: data.message }],
         },
+      };
+    case "SET_Conaversations":
+      return {
+        ...state,
+        conversations: !action.payload,
+      };
+    case "SET_Message":
+      return {
+        ...state,
+        message: action.payload,
       };
     default:
       return state;
