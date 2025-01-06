@@ -5,8 +5,8 @@ import { useAppContext } from "../context/context";
 const MesageBox = () => {
   const { userDetail } = useAppContext();
   return (
-    <div className="w-[100%]  sm:h-[90%] ">
-      <div className="flex justify-center items-center my-6 ">
+    <div className="w-[100%] h-[100%] md:h-[93%] sm:h-[90%]  ">
+      <div className=" flex justify-center items-center my-6 ">
         <div className="border border-primary p-[2px] rounded-full">
           <img
             src={userDetail.profile_pic || logo}

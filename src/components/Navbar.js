@@ -8,11 +8,29 @@ const Navbar = () => {
   const [nav, setNav] = useState("");
   const navigate = useNavigate();
   const [settingOpen, setSettingOpen] = useState(false);
-  const { setNavbar, userDetail } = useAppContext();
-  const handleLogOut = () => {
-    localStorage.removeItem("userToken:");
-    localStorage.removeItem("userDetail:");
-    navigate("/user/sign-in");
+  const { setNavbar, userDetail, API, fetchUsers, resetForm } = useAppContext();
+  // const handleLogOut = () => {
+  //   localStorage.removeItem("userToken:");
+  //   localStorage.removeItem("userDetail:");
+  //   navigate("/user/sign-in");
+  // };
+  // logout
+  const LogOut = async () => {
+    const res = await fetch(`${API}api/logout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: userDetail.email }),
+    });
+    const resData = await res.json();
+    if (res.status === 200) {
+      localStorage.removeItem("userToken:");
+      localStorage.removeItem("userDetail:");
+      navigate("/user/sign-in");
+    }
+    alert(resData.message);
+    resetForm();
   };
   return (
     <div className="Navbar w-[20%] h-[100%] bg-slate-300 py-6 flex  items-center justify-between flex-col sm:flex-row sm:px-6 sm:w-full sm:h-[10%] ">
@@ -80,6 +98,7 @@ const Navbar = () => {
             onClick={() => {
               setNav("users");
               setNavbar("users");
+              fetchUsers();
             }}
           >
             <title>Users</title>
@@ -168,7 +187,7 @@ const Navbar = () => {
       <div className="flex items-center gap-3 flex-col sm:flex-row ">
         {/* setting icon */}
         <div
-          className="flex items-center flex-row cursor-pointer "
+          className="flex items-center flex-row cursor-pointer relative "
           onClick={() => {
             setSettingOpen(!settingOpen);
             setNav("setting");
@@ -193,17 +212,17 @@ const Navbar = () => {
             <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
           </svg>
           <span
-            className={` absolute left-[72px] bottom-[100px] min-h-1 min-w-1 p-2 rounded bg-slate-300 sm:left-auto sm:right-[62px] sm:bottom-[58px] ${
+            className={` absolute left-[3.6rem] bottom-[.1rem] min-h-1 min-w-1 p-2 rounded bg-slate-300 md:left-[2.8rem] sm:left-auto sm:bottom-[3rem] ${
               settingOpen ? "block" : "hidden"
             } `}
           >
-            <button type="button" onClick={() => handleLogOut()}>
+            <button type="button" onClick={LogOut}>
               LogOut
             </button>
           </span>
         </div>
         {/* profile */}
-        <div className="flex items-center flex-col cursor-pointer ">
+        <div className="flex items-center flex-col cursor-pointer sm:hidden">
           <img
             src={userDetail.profile_pic || logo}
             alt=""

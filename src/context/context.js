@@ -11,7 +11,7 @@ const SocketAPI = "https://chat-app-backend-b98d.onrender.com/";
 const initialState = {
   isLoading: false,
   isError: false,
-  userDetail: JSON.parse(localStorage.getItem("userDetail:")),
+  userDetail: JSON.parse(localStorage.getItem("userDetail:")) || null,
   // token: localStorage.getItem("userToken:"),
   conversation: [],
   message: {},
@@ -24,28 +24,6 @@ const initialState = {
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  //   set Socket Api
-  const setSocket = (Api) => {
-    dispatch({ type: "SET_SOCKET", payload: io(Api) });
-  };
-  //   set LoginUserDetail
-  const setUserDetail = (user) => {
-    dispatch({ type: "SET_USER_DETAIL", payload: user });
-  };
-  //   set MessageInput
-  const setMessageInput = (e) => {
-    let message = e.target.value;
-    dispatch({ type: "SET_MESSAGE_INPUT", payload: message });
-  };
-  //   set MessageImageInput
-  const setMessageImageInput = (value) => {
-    let message = value;
-    dispatch({ type: "SET_MESSAGE_INPUT", payload: message });
-  };
-  //   set navbar
-  const setNavbar = (value) => {
-    dispatch({ type: "SET_NAVBAR", payload: value });
-  };
   // fetching convesations
   const fetchConversation = async (user) => {
     dispatch({ type: "SET_LOADING" });
@@ -98,6 +76,68 @@ const AppProvider = ({ children }) => {
       dispatch({ type: "API_ERROR" });
     }
   };
+  //   SendOtp
+  const SendOtp = async (email) => {
+    try {
+      const res = await fetch(`${API}api/sendOtp `, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+      const resData = await res.json();
+      if (res.status === 200) {
+        return "Ok";
+      } else {
+        return resData.message;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //   VerifyOtp
+  const VerifyOtp = async (email, otp) => {
+    try {
+      const res = await fetch(`${API}api/verifyOtp `, {
+        method: "Post",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, otp }),
+      });
+      const resData = await res.json();
+      if (res.status === 200) {
+        return "Verified";
+      } else {
+        return resData.message;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  //   set Socket Api
+  const setSocket = (Api) => {
+    dispatch({ type: "SET_SOCKET", payload: io(Api) });
+  };
+  //   set LoginUserDetail
+  const setUserDetail = (user) => {
+    dispatch({ type: "SET_USER_DETAIL", payload: user });
+  };
+  //   set MessageInput
+  const setMessageInput = (e) => {
+    let message = e.target.value;
+    dispatch({ type: "SET_MESSAGE_INPUT", payload: message });
+  };
+  //   set MessageImageInput
+  const setMessageImageInput = (value) => {
+    let message = value;
+    dispatch({ type: "SET_MESSAGE_INPUT", payload: message });
+  };
+  //   set navbar
+  const setNavbar = (value) => {
+    dispatch({ type: "SET_NAVBAR", payload: value });
+  };
   //   send Message
   const sendMessage = async () => {
     const { message, userDetail, messageInput, socket } = state;
@@ -138,15 +178,16 @@ const AppProvider = ({ children }) => {
   const setMessage = () => {
     dispatch({ type: "SET_Message", payload: {} });
   };
+  // Action to reset the state
+  const resetForm = () => dispatch({ type: "RESET", payload: initialState });
 
   useEffect(() => {
-    setSocket(SocketAPI);
-  }, []);
-  useEffect(() => {
     const user = state.userDetail;
-    setMessage();
-    fetchConversation(user);
-    fetchUsers();
+    if (user) {
+      setMessage();
+      fetchConversation(user);
+      setSocket(SocketAPI);
+    }
   }, [state.userDetail]);
   //   for socket connection
   useEffect(() => {
@@ -162,8 +203,12 @@ const AppProvider = ({ children }) => {
       value={{
         ...state,
         API,
-        setUserDetail,
+        resetForm,
+        fetchUsers,
         fetchMessages,
+        SendOtp,
+        VerifyOtp,
+        setUserDetail,
         setMessageInput,
         setMessageImageInput,
         setNavbar,

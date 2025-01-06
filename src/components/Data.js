@@ -30,11 +30,11 @@ const Data = () => {
     return <div> ......Loading </div>;
   }
   return (
-    <div className="h-[80%]  ">
-      <div className=" h-[5%] text-primary text-lg mx-4 mt-4">
+    <div className="h-[80%] ">
+      <div className=" h-[6%] text-primary text-lg mx-4 ">
         {navbar === "chats" ? "Messages" : "Peoples"}
       </div>
-      <div className="h-[95%] mx-6 overflow-y-scroll  ">
+      <div className="h-[94%] mx-4 overflow-y-scroll  ">
         {data.length > 0 ? (
           data.map(({ user, conversationId }) => {
             const { name, email, userId, profile_pic } = user;
@@ -66,7 +66,7 @@ const Data = () => {
                     <p className="text-sm font-light text-gray-600">
                       {email.length > 10
                         ? `${email.substring(0, 15)}....`
-                        : { email }}
+                        : email}
                     </p>
                   </div>
                 </div>

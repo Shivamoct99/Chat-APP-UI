@@ -63,6 +63,9 @@ const Appreducer = (state, action) => {
         ...state,
         message: action.payload,
       };
+    case "RESET":
+      console.log(state, action.payload);
+      return action.payload; // Reset to initial state
     default:
       return state;
   }

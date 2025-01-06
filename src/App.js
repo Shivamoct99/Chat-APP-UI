@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Dashboard from "./modules/Dashboard";
 import Form from "./modules/Form";
 import ConvesationBox from "./components/ConvesationBox";
+import ForgotPassword from "./modules/Form/forgotPassword";
 
 const ProtectedRoutes = ({ children, auth = false }) => {
   const isLoggedIn = localStorage.getItem("userToken:") !== null || false;
@@ -42,6 +43,14 @@ function App() {
         element={
           <ProtectedRoutes>
             <Form isSignIn={false} />
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path="/user/Forgot-Password"
+        element={
+          <ProtectedRoutes>
+            <ForgotPassword />
           </ProtectedRoutes>
         }
       />

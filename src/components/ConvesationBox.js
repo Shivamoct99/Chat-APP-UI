@@ -26,20 +26,15 @@ const ConvesationBox = () => {
 
   const handleUploadPhoto = async (e) => {
     e.preventDefault();
-    // setIsLoading(true);
     const file = e.target.files[0];
-    console.log(file);
     if (file) {
       const compressedFile = await Compressor(file);
-      // setUploadPhoto(compressedFile);
       const fileUrl = await Uploadfile(compressedFile);
-      // console.log(fileUrl);
       setMessageImageInput(fileUrl);
-      // setIsLoading(false);
     }
   };
   return (
-    <div className="w-[100%] h-screen bg-gary flex flex-col items-center  ">
+    <div className="w-[100%] h-screen bg-gary flex flex-col items-center bg-red ">
       {message?.receiver?.name && (
         <div className="w-full flex flex-row items-center justify-evenly">
           {/*  Back Arrow */}
@@ -52,7 +47,7 @@ const ConvesationBox = () => {
             <IoArrowBackSharp size={40} />
           </div>
           {/* receiver info box */}
-          <div className="w-[75%] bg-secondary h-[60px] mt-4 mb-4 rounded-full flex items-center px-14 sm:w-[90%]">
+          <div className="w-[75%] bg-secondary h-[4rem] mt-4 mb-4 rounded-full flex items-center px-14 sm:w-[90%]">
             {/* receiver img */}
             <div className="cursor-pointer">
               <img
@@ -154,14 +149,11 @@ const ConvesationBox = () => {
             <textarea
               // name={name}
               rows={1}
-              // max-rows="4"
               // cols={5}
               value={messageInput}
-              // value=
               className={`  border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full capitalize  p-2 border-0 shadow-md rounded-full bg-light focus:ring-0 focus:border-0 outline-none resize-none`}
               placeholder="type a message"
               onChange={(e) => setMessageInput(e)}
-              // required={isRequired}
             />
           </div>
           {/* send icon */}
@@ -188,35 +180,9 @@ const ConvesationBox = () => {
               <path d="M21 3l-6.5 18a.55 .55 0 0 1 -1 0l-3.5 -7l-7 -3.5a.55 .55 0 0 1 0 -1l18 -6.5" />
             </svg>
           </div>
-          <span
-            className={` absolute right-[72px] bottom-[100px] min-h-2 min-w-3 p-6 rounded bg-slate-300 sm:left-auto sm:right-[62px] sm:bottom-[58px] ${
-              barOpen ? "block" : "hidden"
-            }`}
-          >
-            <ul className="flex flex-col gap-2">
-              <span className="w-30  relative ">
-                <label
-                  htmlFor="image"
-                  className="block text-sm font-medium text-gray-800 cursor-pointer"
-                >
-                  Image
-                </label>
-                <input
-                  type="file"
-                  accept="image/png, image/gif, image/jpeg"
-                  id="image"
-                  className={` mb-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 hidden `}
-                  onChange={handleUploadPhoto}
-                />
-              </span>
-              <li>Document</li>
-              <li>Document</li>
-              <li>Document</li>
-            </ul>
-          </span>
           {/* adding icon*/}
           <div
-            className={`ml-4 p-2 cursor-pointer bg-light rounded-full 
+            className={`ml-4 p-2 cursor-pointer bg-light rounded-full relative
             `}
             onClick={() => {
               setbarOpen(!barOpen);
@@ -240,6 +206,32 @@ const ConvesationBox = () => {
               <path d="M9 12h6" />
               <path d="M12 9v6" />
             </svg>
+            <span
+              className={` absolute right-[1rem] bottom-[3.4rem] min-h-2 min-w-3 p-6 rounded bg-secondary  sm:bottom-[3.2rem] ${
+                barOpen ? "block" : "hidden"
+              }`}
+            >
+              <ul className="flex flex-col gap-2">
+                <span className="w-30  relative ">
+                  <label
+                    htmlFor="image"
+                    className="block text-sm font-medium text-gray-800 cursor-pointer"
+                  >
+                    Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/png, image/gif, image/jpeg"
+                    id="image"
+                    className={` mb-6 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 hidden `}
+                    onChange={handleUploadPhoto}
+                  />
+                </span>
+                <li>Document</li>
+                <li>Document</li>
+                <li>Document</li>
+              </ul>
+            </span>
           </div>
         </div>
       )}

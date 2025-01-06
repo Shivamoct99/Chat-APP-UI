@@ -9,7 +9,7 @@ const Dashboard = () => {
     <div className=" w-screen flex sm:h-screen">
       {/* navbar  */}
       <div
-        className={` w-[32%] h-screen flex sm:flex-col-reverse sm:w-[100%]  ${
+        className={` w-[36%] h-screen flex sm:flex-col-reverse sm:w-[100%]  ${
           conversations ? "hidden" : ""
         } `}
       >
@@ -19,7 +19,7 @@ const Dashboard = () => {
       </div>
       {/* Message /conversation box */}
       <div
-        className={`${conversations ? "w-full block" : "w-[68%] sm:hidden"}`}
+        className={`${conversations ? "w-full block" : "w-[64%] sm:hidden"}`}
       >
         <ConvesationBox />
       </div>
