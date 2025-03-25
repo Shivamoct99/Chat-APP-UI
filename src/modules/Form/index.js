@@ -103,7 +103,8 @@ const Form = ({ isSignIn = false }) => {
     }
   };
   const handleSendOtp = async () => {
-    let res = await SendOtp(data.email);
+    // let verify;
+    let res = await SendOtp(data.email ,true);
     if (res === "Ok") {
       setIsOtpSend(true);
     } else {

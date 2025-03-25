@@ -1,19 +1,14 @@
 import React, { useState } from "react";
 import logo from "../assets/logo.jpeg";
 import { useAppContext } from "../context/context";
-// import { redirect } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const [nav, setNav] = useState("");
+  // const [Navbar, setNav] = useState("chats");
   const navigate = useNavigate();
   const [settingOpen, setSettingOpen] = useState(false);
-  const { setNavbar, userDetail, API, fetchUsers, resetForm } = useAppContext();
-  // const handleLogOut = () => {
-  //   localStorage.removeItem("userToken:");
-  //   localStorage.removeItem("userDetail:");
-  //   navigate("/user/sign-in");
-  // };
+  const { navbar,setNavbar, userDetail, API, fetchUsers, resetForm, fetchConversation } = useAppContext();
+  const [activeNavbar, setActiveNavbar] = useState(navbar);
   // logout
   const LogOut = async () => {
     const res = await fetch(`${API}api/logout`, {
@@ -33,7 +28,7 @@ const Navbar = () => {
     resetForm();
   };
   return (
-    <div className="Navbar w-[20%] h-[100%] bg-slate-300 py-6 flex  items-center justify-between flex-col sm:flex-row sm:px-6 sm:w-full sm:h-[10%] ">
+    <div className="Navbar w-[20%]  bg-slate-300 py-6 flex  items-center justify-between flex-col sm:flex-row sm:px-6 sm:w-full sm:h-[10%] ">
       <div className="w-[100%] flex items-center gap-5 flex-col sm:flex-row  ">
         {/* whats app logo */}
         <div className="flex items-center flex-col pb-5 border-slate-400 border-b-2 sm:hidden">
@@ -58,7 +53,7 @@ const Navbar = () => {
           <svg
             value="Chats"
             className={` p-[6px] hover:bg-slate-400  hover:rounded-full ${
-              nav === "chats" ? "active" : ""
+              activeNavbar === "chats" ? "active" : ""
             }`}
             viewBox="0 0 24 24"
             height="44"
@@ -66,8 +61,9 @@ const Navbar = () => {
             preserveAspectRatio="xMidYMid meet"
             fill="none"
             onClick={() => {
-              setNav("chats");
               setNavbar("chats");
+              setActiveNavbar("chats");
+      fetchConversation(userDetail);
             }}
           >
             <title>Chats</title>
@@ -88,7 +84,7 @@ const Navbar = () => {
         <div className="flex items-center flex-col cursor-pointer ">
           <svg
             className={` p-[6px] hover:bg-slate-400  hover:rounded-full ${
-              nav === "users" ? "active" : ""
+              activeNavbar === "users" ? "active" : ""
             }`}
             viewBox="0 0 24 24"
             height="44"
@@ -96,8 +92,9 @@ const Navbar = () => {
             preserveAspectRatio="xMidYMid meet"
             fill="none"
             onClick={() => {
-              setNav("users");
+              // setNav("users");
               setNavbar("users");
+              setActiveNavbar("users");
               fetchUsers();
             }}
           >
@@ -125,7 +122,7 @@ const Navbar = () => {
         <div className="flex items-center flex-col cursor-pointer ">
           <svg
             className={` p-[6px] hover:bg-slate-400  hover:rounded-full ${
-              nav === "status" ? "active" : ""
+             activeNavbar === "status" ? "active" : ""
             }`}
             viewBox="0 0 24 24"
             height="44"
@@ -133,7 +130,8 @@ const Navbar = () => {
             preserveAspectRatio="xMidYMid meet"
             fill="none"
             onClick={() => {
-              setNav("status");
+            //   setNav("status");
+              setActiveNavbar("status");
             }}
           >
             <title>Status</title>
@@ -162,7 +160,7 @@ const Navbar = () => {
         <div className="flex items-center flex-col cursor-pointer ">
           <svg
             className={` p-[6px] hover:bg-slate-400  hover:rounded-full ${
-              nav === "community" ? "active" : ""
+             activeNavbar === "community" ? "active" : ""
             }`}
             viewBox="0 0 24 24"
             height="44"
@@ -170,7 +168,8 @@ const Navbar = () => {
             preserveAspectRatio="xMidYMid meet"
             fill="none"
             onClick={() => {
-              setNav("community");
+              setActiveNavbar("community");
+
             }}
           >
             <title>Community</title>
@@ -190,12 +189,12 @@ const Navbar = () => {
           className="flex items-center flex-row cursor-pointer relative "
           onClick={() => {
             setSettingOpen(!settingOpen);
-            setNav("setting");
+            setActiveNavbar("setting");
           }}
         >
           <svg
             className={` p-[6px] hover:bg-slate-400  hover:rounded-full ${
-              nav === "setting" ? "active" : ""
+              activeNavbar === "setting" ? "active" : ""
             }`}
             viewBox="0 0 24 24"
             height="44"
@@ -230,7 +229,7 @@ const Navbar = () => {
             // height={40}
             className=" w-16 h-16 p-[8px] rounded-full "
           />
-          <span></span>
+          {/* <span></span> */}
         </div>
       </div>
     </div>

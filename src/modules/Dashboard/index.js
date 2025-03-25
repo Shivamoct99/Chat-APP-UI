@@ -6,10 +6,10 @@ import { useAppContext } from "../../context/context";
 const Dashboard = () => {
   let { conversations } = useAppContext();
   return (
-    <div className=" w-screen flex sm:h-screen">
+    <div className=" w-full min-h-screen flex ">
       {/* navbar  */}
       <div
-        className={` w-[36%] h-screen flex sm:flex-col-reverse sm:w-[100%]  ${
+        className={` w-[36%] h-screen flex overflow-scroll sm:flex-col-reverse sm:w-[100%]  sm:h-[100%]  ${
           conversations ? "hidden" : ""
         } `}
       >

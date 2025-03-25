@@ -37,20 +37,24 @@ const Appreducer = (state, action) => {
         users: action.payload,
       };
     case "SET_MESSAGE_DATA":
-      const { resData, user, conversationId } = action.payload;
+      let { resData, user ,conversationId} = action.payload;
       return {
         ...state,
-        message: { messages: resData, receiver: user, conversationId },
+        // message: { messages: resData.data,  conversationId },
+        message: { messages: resData.data, receiver: user, conversationId },
       };
     case "SET_SOCKET_MESSAGE":
-      const data = action.payload;
+      const msg = action.payload;
+      // console.log(typeof(msg),msg)
       const { message } = state;
       const { messages } = message;
       return {
         ...state,
         message: {
           ...message,
-          messages: [...messages, { user: data.user, message: data.message }],
+          // messages: [...messages, { senderId: data.user.id, message: data.message }],
+          // messages: [...messages, msg],
+          messages: Array.isArray(msg)? msg:[...messages, msg],
         },
       };
     case "SET_Conaversations":
@@ -62,6 +66,17 @@ const Appreducer = (state, action) => {
       return {
         ...state,
         message: action.payload,
+      };
+    case "SET_SELECTED_CONVERSATION":
+      return {
+        ...state,
+        selectedConversation: action.payload,
+      };
+    case "SET_NOTIFICATION":
+      const { notification } = state;
+      return {
+        ...state,
+        notification: [...notification , action.payload],
       };
     case "RESET":
       console.log(state, action.payload);

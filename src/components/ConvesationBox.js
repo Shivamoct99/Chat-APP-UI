@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import logo from "../assets/logo.jpeg";
-import Inputs from "../Helpers/inputs";
+// import Inputs from "../Helpers/inputs";
 import { useAppContext } from "../context/context";
 import { IoArrowBackSharp } from "react-icons/io5";
+// import { BsThreeDotsVertical } from "react-icons/bs";
 import Compressor from "../Helpers/Compressor";
 import Uploadfile from "../Helpers/Uploadfile";
 // import Buttons from "../Helpers/Buttons";
@@ -12,13 +13,73 @@ const ConvesationBox = () => {
     userDetail,
     message,
     messageInput,
+    selectedConversation,
     setMessageInput,
     setMessageImageInput,
     sendMessage,
+    deleteMessage,
     setconversations,
   } = useAppContext();
   const [barOpen, setbarOpen] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+  const [longPressTimer, setLongPressTimer] = useState(null);
+  const menuRef = useRef(null); // Ref to detect outside click
   const messageRef = useRef();
+
+  let ProfilePic,Name;
+  if (selectedConversation?.isGroupConversation) {
+    Name=selectedConversation.conversationName
+  }else{
+    Name=message?.receiver?.find(user=>user._id !== userDetail._id)?.name
+    ProfilePic=message?.receiver?.find(user=>user._id !== userDetail._id)?.profile_pic;
+  }
+  // ✅ Show menu at right-click or long-press position
+  const openMenu = (event) => {
+    event.preventDefault();
+    const clickX = event.clientX + 10;
+    const clickY = event.clientY ;
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight - 20;
+    const menuWidth = 160; // Estimated menu width
+    const menuHeight = 130; // Estimated menu height
+
+    let menuX = clickX;
+    let menuY = clickY;
+
+    // ✅ Adjust position for RIGHT side overflow
+    if (clickX + menuWidth > screenWidth) {
+      menuX = clickX - menuWidth; // Show to the left
+    }
+
+    // ✅ Adjust position for BOTTOM side overflow
+    if (clickY + menuHeight > screenHeight) {
+      menuY = clickY - menuHeight; // Show above
+    }
+
+    // ✅ Adjust position for TOP side overflow
+    if (clickY < menuHeight) {
+      menuY = clickY + 10; // Show below if too close to the top
+    }
+
+    setMenuPosition({ x: menuX, y: menuY });
+    // setMenuPosition({ x: event.clientX, y: event.clientY });
+    setShowMenu(true);
+  };
+
+  // ✅ Close menu when clicking outside
+  const closeMenu = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setShowMenu(false);
+    }
+  };
+    // ✅ Detect click outside to close menu
+    useEffect(() => {
+      if (showMenu) {
+        document.addEventListener("click", closeMenu);
+      }
+      return () => document.removeEventListener("click", closeMenu);
+    }, [showMenu]);
 
   useEffect(() => {
     messageRef?.current?.scrollIntoView({ behavior: "smooth" });
@@ -33,9 +94,26 @@ const ConvesationBox = () => {
       setMessageImageInput(fileUrl);
     }
   };
+    // ✅ Handle long press for mobile
+    const handleTouchStart = (event) => {
+      const timer = setTimeout(() => {
+        openMenu(event.touches[0]);
+      }, 600);
+      setLongPressTimer(timer);
+    };
+  
+    const handleTouchEnd = () => clearTimeout(longPressTimer);
+    
+    const handleDelete= async (e,messageId) => {
+      e.preventDefault();
+deleteMessage(messageId);
+setShowMenu(false)
+      // console.log(messageId)
+
+         }
   return (
-    <div className="w-[100%] h-screen bg-gary flex flex-col items-center bg-red ">
-      {message?.receiver?.name && (
+    <div className="w-[100%] h-screen bg-gary flex flex-col items-center ">
+      {message?.receiver && (
         <div className="w-full flex flex-row items-center justify-evenly">
           {/*  Back Arrow */}
           <div
@@ -47,22 +125,22 @@ const ConvesationBox = () => {
             <IoArrowBackSharp size={40} />
           </div>
           {/* receiver info box */}
-          <div className="w-[75%] bg-secondary h-[4rem] mt-4 mb-4 rounded-full flex items-center px-14 sm:w-[90%]">
+          <div className="w-[75%] bg-secondary h-[4rem] mt-4 mb-4 rounded-full flex items-center px-8 sm:w-[90%]">
             {/* receiver img */}
             <div className="cursor-pointer">
               <img
-                src={message.receiver.profile_pic || logo}
+                src={ ProfilePic || logo}
                 alt=""
-                className="w-12 h-12 rounded-full"
+                className="w-10 h-10 rounded-full"
               />
             </div>
             <div className="ml-6 mr-auto">
-              <h3 className="text-lg capitalize font-semibold">
-                {message.receiver.name}
+              <h3 className="text-[1.25rem] capitalize font-semibold">
+                {Name||"demo"}
               </h3>
-              <p className="text-sm font-light text-gray-600">
+              {/* <p className="text-sm font-light text-gray-600">
                 {message.receiver.email}
-              </p>
+              </p> */}
             </div>
             {/* video icon */}
             <div className="cursor-pointer flex gap-6 ">
@@ -111,22 +189,66 @@ const ConvesationBox = () => {
       <div className="h-[75%] w-full overflow-y-scroll shadow-sm">
         <div className=" p-6">
           {message?.messages?.length > 0 ? (
-            message.messages.map(({ message, user: { id } }) => {
+            message.messages.map(( {message,senderId,_id:messageId}) => {
+              let pic=selectedConversation?.members?.find(user =>user._id===senderId)?.profile_pic;
               return (
                 <>
-                  <div
-                    className={` max-w-fit rounded-b-xl p-4 mb-4 break-words  ${
-                      id === userDetail._id
-                        ? " bg-primary rounded-tl-xl ml-auto text-white  "
-                        : "bg-secondary rounded-tr-xl"
+                <div className={` max-w-fit flex gap-1   ${
+                      senderId === userDetail._id
+                      ? "  ml-auto flex-row-reverse "
+                      : ""
                     }`}
+                    // onContextMenu={openMenu}
+                    // onTouchStart={handleTouchStart}
+                    // onTouchEnd={handleTouchEnd}
+                    >
+                <img
+                src={pic }
+                alt=""
+                className="w-6 h-6 rounded-full"
+              />
+              {/* Message  */}
+                  <div
+                    className={` max-w-fit rounded-b-xl p-2 mb-3 break-words cursor-pointer flex gap-1  ${
+                      senderId === userDetail._id
+                      ? " bg-primary rounded-tl-xl ml-auto text-white flex-row-reverse  "
+                      : "bg-secondary rounded-tr-xl"
+                    }`}
+                    onContextMenu={openMenu}
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
                   >
+                    {/* <div className="cursor-pointer ">
+                    <BsThreeDotsVertical />
+                    </div> */}
                     {message.startsWith("http://") ? (
                       <img src={message} alt="message" className="w-48 h-48" />
                     ) : (
                       message
                     )}
+                  {/* </div> */}
+                   {/* ✅ Context Menu */}
+      {showMenu && (
+        <div
+          ref={menuRef}
+          className="absolute bg-white text-black border rounded-lg w-40 text-sm z-50 overflow-hidden"
+          style={{ top: `${menuPosition.y}px`, left: `${menuPosition.x}px` }} // Dynamic Position
+        >
+          <button className="block px-4 py-2 hover:bg-gray-100 w-full text-left">✏ Edit</button>
+          <button
+            className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+            onClick={() => navigator.clipboard.writeText(message)}
+          >
+            📋 Copy
+          </button>
+          <button className="block px-4 py-2 hover:bg-gray-100 w-full text-left" onClick={(e)=>handleDelete(e,messageId)}>❌ Delete</button>
+          <button className="block px-4 py-2 hover:bg-gray-100 w-full text-left">
+            🚨 Delete for Everyone
+          </button>
+        </div>
+      )}
                   </div>
+                </div>
                   <div ref={messageRef}></div>
                 </>
               );
@@ -142,7 +264,7 @@ const ConvesationBox = () => {
         </div>
       </div>
       {/* input to type message */}
-      {message?.receiver?.name && (
+      {message?.receiver && (
         <div className="px-6  w-full flex items-center p-4 bg-secondary">
           {/*  */}
           <div className={` w-[80%]  min-w-50`}>
